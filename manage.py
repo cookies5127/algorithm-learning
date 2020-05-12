@@ -12,7 +12,7 @@ def get_method_name(file_name):
 def load_module(file_name, module_name=None):
     r = None
 
-    dir = os.path.realpath(os.path.join('problem', module_name))
+    dir = os.path.realpath(os.path.join('leetcode', module_name))
     for file_path, name, _ in pkgutil.iter_modules([dir]):
         if name.startswith(file_name):
             r = file_path
