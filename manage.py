@@ -5,7 +5,7 @@ import pkgutil
 
 
 def get_method_name(file_name):
-    method_name = re.sub(r'^\d_', '', file_name)
+    method_name = re.sub(r'^\d+_', '', file_name)
     return re.sub(r'_[a-z]', lambda x: x.group()[1:].upper(), method_name)
 
 
@@ -32,10 +32,14 @@ def execute_from_command_line(name, module_name=None):
     s = module.Solution()
     method_name = get_method_name(file_name)
     method = getattr(s, method_name, None)
-    assert method is not None, 'Please check method name'
+    assert method is not None, f'Please check method {method_name}'
 
     for inputs, excepts in module.EXAMPLES:
-        r = method(*inputs)
+        if isinstance(inputs, tuple):
+            r = method(*inputs)
+        else:
+            r = method(inputs)
+
         print('INPUTS: ', inputs, 'EXCEPTS: ', excepts)
         print('OUTPUT: ', r)
 
