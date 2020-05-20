@@ -46,9 +46,26 @@ class Solution:
                 break
         return r
 
+
+class Solution1:
+    '''
+        用时最小
+    '''
+
     def twoSum(self, nums: List[int], target: int) -> List[int]:
         memeroy = {}
         for i, v in enumerate(nums):
             if v in memeroy:
                 return [memeroy[v], i]
             memeroy[target - v] = i
+
+
+class Solution2:
+    '''
+        内存最小
+    '''
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
+        for i in range(len(nums)):
+            for j in range(i+1, len(nums)):
+                if nums[i]+nums[j] == target:
+                    return [i, j]

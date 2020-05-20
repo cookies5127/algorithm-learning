@@ -37,23 +37,20 @@ class Solution:
     def addTwoNumbers(self, l1: ListNode, l2: ListNode) -> ListNode:
         r = ListNode(0)
 
-        node1 = l1
-        node2 = l2
-
         carry = 0
         carry_node = r
-        while node1 or node2 or carry != 0:
-            v1 = node1.val if node1 else 0
-            v2 = node2.val if node2 else 0
+        while l1 or l2 or carry != 0:
+            v1 = l1.val if l1 else 0
+            v2 = l2.val if l2 else 0
+
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+
             carry += v1 + v2
-
             v = carry % 10
-            carry_node.next = ListNode(v)
-            carry_node = carry_node.next
-
             carry = carry // 10
 
-            node1 = node1.next if node1 else None
-            node2 = node2.next if node2 else None
+            carry_node.next = ListNode(v)
+            carry_node = carry_node.next
 
         return r.next

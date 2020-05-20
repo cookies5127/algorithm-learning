@@ -25,6 +25,10 @@ Example 3:
 '''
 
 '''
+解题思路：
+
+    1. 出现重复字符时，重新从上一个重复字符后面为起点，再次开始寻找
+
 总结：
 
     1. 分治法用于缩小问题规模，然后将结果组合起来得到最终结果，部分问题求解就是所需的算法。
@@ -102,10 +106,16 @@ class Solution1:
             return 0
 
 
-class Solution:
+class Solution2:
+    '''
+        速度很快，但是内存占用特别高
 
-    def lengthOfLongestSubstring_myself(self, s: str) -> int:
+        新建了一个字符串，同时使用了 ''.index 求出重复的位置
+    '''
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
         max_value = 0
+        count = 0
         ans = ''
 
         j = 0
@@ -113,12 +123,32 @@ class Solution:
         while j < length:
             v = s[j]
             if v in ans:
-                max_value = max(len(ans), max_value)
                 k = ans.index(v)
                 ans = ans[k+1:]
+                count -= k+1
             else:
                 ans += v
+                count += 1
+                max_value = max(max_value, count)
                 j += 1
 
-        max_value = max(len(ans), max_value)
+        return max_value
+
+
+class Solution:
+
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        d = {}
+
+        max_value = 0
+        j = -1
+
+        for i, v in enumerate(s):
+            if v in d and d[v] > j:
+                j = d[v]
+                d[v] = i
+            else:
+                d[v] = i
+                max_value = max(max_value, i - j)
+
         return max_value

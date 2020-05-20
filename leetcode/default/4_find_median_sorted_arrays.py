@@ -1,4 +1,3 @@
-import math
 from typing import List
 
 '''
@@ -37,7 +36,9 @@ Example 2:
     如果 m + n 为奇数，nums[(m + n + 1) / 2] 为其中位数；
     如果 m + n 为偶数，(nums[(m + n + 1) // 2] + nums[(m + n + 2) // 2]) / 2 为其中位数。
 
-    start_pos
+    主要考查对二分法查找，二分法基本思路是不断缩小范围，最终只剩下结果。由中位数的理论推导可知，
+    假设该位置为k，则每个数组中最多 k // 2 个数字小于中位数，不断缩小比较数组的规模和 k 值，
+    直到找到最终结果。
 '''
 
 
@@ -47,13 +48,13 @@ EXAMPLES = [
         3,
     ),
     (
-        ([1, 2], [3, 4]),
+        ([3, 4], [1, 2]),
         2.5,
     ),
 ]
 
 
-class Solution:
+class Solution1:
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         m = len(nums1)
         n = len(nums2)
@@ -76,11 +77,36 @@ class Solution:
         return (array[(m + n + 1) // 2 - 1] + array[(m + n + 2) // 2 - 1]) / 2
 
 
-class Solution1:
+class Solution:
+
+    def findKth(self, nums1: List[int], nums2: List[int], k: int) -> float:
+        m = len(nums1)
+        n = len(nums2)
+
+        if not nums1:
+            return nums2[k-1]
+        if not nums2:
+            return nums1[k-1]
+
+        if k == 1:
+            return min(nums1[0], nums2[0])
+
+        i = min(k // 2, m) - 1
+        j = min(k // 2, n) - 1
+
+        if nums1[i] > nums2[j]:
+            return self.findKth(nums1, nums2[j+1:], k - j - 1)
+        else:
+            return self.findKth(nums1[i+1:], nums2, k - i - 1)
 
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         m = len(nums1)
         n = len(nums2)
 
-        left = (m + n + 1) // 2
-        right = (m + n + 2) // 2
+        l = (m + n + 1) // 2
+        r = (m + n + 2) // 2
+
+        left = self.findKth(nums1, nums2, l)
+        right = self.findKth(nums1, nums2, r)
+
+        return (left + right) / 2.0
