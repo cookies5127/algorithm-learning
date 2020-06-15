@@ -1,6 +1,6 @@
 import re
 import os
-import sys
+import argparse
 import pkgutil
 
 
@@ -34,22 +34,23 @@ def execute_from_command_line(name, module_name=None):
     method = getattr(s, method_name, None)
     assert method is not None, f'Please check method {method_name}'
 
-    for inputs, excepts in module.EXAMPLES:
+    for inputs, expectation in module.EXAMPLES:
         if isinstance(inputs, tuple):
             r = method(*inputs)
         else:
             r = method(inputs)
 
-        print('INPUTS: ', inputs, 'EXCEPTS: ', excepts)
+        print('INPUTS: ', inputs, 'EXCEPTS: ', expectation)
         print('OUTPUT: ', r)
+        print('CORRECT: ', expectation == r)
 
 
 if __name__ == '__main__':
-    argv = sys.argv[1:]
-    try:
-        function_name = argv[0]
-    except IndexError as e:
-        function_name = None
+    parser = argparse.ArgumentParser(description="Demo of argparse")
+    parser.add_argument('function_name')
+    parser.add_argument('-m', '--module', default='default')
 
-    assert function_name is not None, 'Please pass function_name'
-    execute_from_command_line(function_name, module_name='default')
+    args = parser.parse_args()
+
+    assert args.function_name is not None, 'Please pass function_name'
+    execute_from_command_line(args.function_name, module_name=args.module)
