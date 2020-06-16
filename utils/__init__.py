@@ -41,7 +41,7 @@ def build_binary_tree(*args: Union[int, None]) -> TreeNode:
             if i % 2 == 1:
                 root_index += 1
                 root = nodes[root_index]
-                while root is None:
+                while root is None and root_index < len(nodes) - 1:
                     root_index += 1
                     root = nodes[root_index]
 

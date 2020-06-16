@@ -76,3 +76,5 @@ class Solution:
     def isSymmetric(self, root: TreeNode) -> bool:
         if root:
             return self.is_equal(root.left, root.right)
+        else:
+            return True

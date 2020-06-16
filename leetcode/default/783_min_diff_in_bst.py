@@ -1,3 +1,7 @@
+from typing import List
+from utils import build_binary_tree
+from utils.types import TreeNode
+
 '''
 783. Minimum Distance Between BST Nodes
 
@@ -28,3 +32,57 @@ Note:
     2. The BST is always valid, each node's value is an integer, and each node's
        value is different.
 '''
+
+
+'''
+总结：
+
+    1. 二叉搜索树的中序遍历结果就是一个升序数组，所以相邻两数之间可能存在最小差值
+'''
+
+
+EXAMPLES = [
+    (
+        build_binary_tree(*[
+            90, 69, None, 49, 89, None, 52,
+        ]),
+        1,
+    ),
+]
+
+'''
+         90
+        /
+      69
+     /  \
+   49    89
+     \
+     52
+'''
+
+
+class Solution:
+
+    def get_array(self, root: TreeNode) -> List[int]:
+        r = []
+
+        if root:
+            if root.left:
+                r += self.get_array(root.left)
+
+            r += [root.val]
+
+            if root.right:
+                r += self.get_array(root.right)
+
+        return r
+
+    def minDiffInBST(self, root: TreeNode) -> List[int]:
+        arr = self.get_array(root)
+        if arr:
+            ans = float('inf')
+            for i, a in enumerate(arr[:-1]):
+                ans = min(arr[i + 1] - a, ans)
+            return ans
+        else:
+            return 0

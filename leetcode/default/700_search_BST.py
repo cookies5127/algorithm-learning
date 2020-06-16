@@ -1,3 +1,6 @@
+from utils import build_binary_tree
+from utils.types import TreeNode
+
 '''
 700. Search in Binary Search Tree
 
@@ -32,12 +35,20 @@ expected output (serialized tree format) as [], not null.
 
 EXAMPLES = [
     (
-        build_binary_tree(*[
-
-        ]),
-    )
+        (build_binary_tree(*[4, 2, 7, 1, 3]), 2),
+        build_binary_tree(*[2, 1, 2]),
+    ),
 ]
 
 
 class Solution:
     def searchBST(self, root: TreeNode, val: int) -> TreeNode:
+        r = None
+        if root:
+            if root.val < val:
+                r = self.searchBST(root.right, val)
+            elif root.val > val:
+                r = self.searchBST(root.left, val)
+            else:
+                r = root
+        return r
